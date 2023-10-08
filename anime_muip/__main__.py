@@ -1,38 +1,39 @@
 import requests
 import hashlib
-import urllib.parse
 
-def sha256_sign(secret, message):
-    sha256 = hashlib.sha256()
-    sha256.update(f"{message}{secret}".encode())
-    return sha256.hexdigest()
+class AnimeMUIP():
+    def __init__(self, secret: str, ssl: bool = False, ip: str = '127.0.0.1', port: int = 21051, ticket: str = 'GM', region: str = 'dev_docker', cmd_id: int = 1116):
+        self.secret = secret
 
-def muip_client(uid: str, command: str, secret: str, ticket: str = "GM", region: str = "dev_docker", url: str = "http://127.0.0.1:21051/api", cmd_id: str = "1116"):
+        self.url = f'{"https" if ssl == True else "http"}://{ip}:{str(port)}/api'
+        self.ticket = ticket
+        self.region = region
+        self.cmd_id = cmd_id
 
-    payload = {
-        "region": region,
-        "ticket": ticket,
-        "cmd": cmd_id,
-        "uid": uid,
-        "msg": command
-    }
+    def sha256_sign(self, secret: str, message: str):
+        sha256 = hashlib.sha256()
+        sha256.update(f"{message}{secret}".encode())
+        return sha256.hexdigest()
 
-    kvs = []
-    for key, value in payload.items():
-        kvs.append(f"{key}={value}")
-    kvs.sort()
+    def muip_client(self, uid: str, command: str):
+        payload = {
+            "region": self.region,
+            "ticket": self.ticket,
+            "cmd": self.cmd_id,
+            "uid": uid,
+            "msg": command
+        }
 
-    qstr = "&".join(kvs)
-    sign = sha256_sign(secret, qstr)
+        kvs = []
 
-    params = {
-        "region": region,
-        "ticket": ticket,
-        "cmd": cmd_id,
-        "uid": uid,
-        "msg": command,
-        "sign": sign
-    }
+        for key, value in payload.items():
+            kvs.append(f"{key}={str(value)}")
+            
+        kvs.sort()
 
-    response = requests.get(url, params=params)
-    return response.content.decode()
+        qstr = "&".join(kvs)
+        sign = self.sha256_sign(self.secret, qstr)
+        payload['sign'] = sign
+
+        response = requests.get(self.url, params=payload)
+        return response.content.decode()

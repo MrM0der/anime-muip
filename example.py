@@ -1,3 +1,5 @@
-import anime_muip
+from anime_muip import AnimeMUIP
 
-print(anime_muip.muip_client("7", "mcoin 1", "YOUR_TOKEN", url="http://10.242.1.1:21051/api"))
+client = AnimeMUIP('YOUR_TOKEN', ip='10.242.1.1')
+response = client.muip_client("7", "mcoin 1")
+print(response)
