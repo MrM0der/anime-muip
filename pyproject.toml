@@ -1,0 +1,12 @@
+[build-system]
+requires = ["requests", "hashlib"]
+
+[project]
+name = "anime-muip"
+version = "1.0.0"
+description = "Simple module for anime game servers"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+keywords = ["anime-game", "muip", "gi", "gio"]
+authors = ["MrModer", "Orzxiety"]
