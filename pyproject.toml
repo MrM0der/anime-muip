@@ -1,5 +1,5 @@
 [build-system]
-requires = ["requests"]
+requires = ["setuptools", "requests"]
 
 [project]
 name = "anime-muip"
