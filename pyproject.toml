@@ -1,5 +1,5 @@
 [build-system]
-requires = ["requests", "hashlib"]
+requires = ["requests"]
 
 [project]
 name = "anime-muip"
